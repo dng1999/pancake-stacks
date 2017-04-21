@@ -8,13 +8,15 @@ The file follows the following format:
      Every command is a single character that takes up a line
      Any command that requires arguments must have those arguments in the second line.
      The commands are as follows:
+         push: push a copy of the current top of the coordinate system
+         pop: removes the top of the cs stack
+
          sphere: add a sphere to the edge matrix - 
 	    takes 4 arguemnts (cx, cy, cz, r)
          torus: add a torus to the edge matrix - 
 	    takes 5 arguemnts (cx, cy, cz, r1, r2)
          box: add a rectangular prism to the edge matrix - 
 	    takes 6 arguemnts (x, y, z, width, height, depth)	    
-
 	 circle: add a circle to the edge matrix - 
 	    takes 3 arguments (cx, cy, r)
 	 hermite: add a hermite curve to the edge matrix -
@@ -45,13 +47,15 @@ The file follows the following format:
 
 See the file script for an example of the file format
 """
-ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite', 'box', 'sphere', 'torus' ]
+ARG_COMMANDS = [ 'line', 'scale', 'move', 'rotate', 'save', 'circle', 'bezier', 'hermite', 'box', 'sphere', 'torus', 'push', 'pop' ]
 
 def parse_file( fname, edges, transform, screen, color ):
 
     f = open(fname)
     lines = f.readlines()
     poly = 0
+    stack = []
+    stack.append(ident(new_matrix()))
 
     step = 0.1
     c = 0
@@ -63,8 +67,18 @@ def parse_file( fname, edges, transform, screen, color ):
             c+= 1
             args = lines[c].strip().split(' ')
             #print 'args\t' + str(args)
+
+        if line == 'push':
+            print 'PUSH\t'
+#fix later;not a deep copy yet
+            item = stack[len(stack)-1]
+            stack.append(item)
+
+        elif line == 'pop':
+            print 'POP\t'
+            stack.pop()
             
-        if line == 'sphere':
+        elif line == 'sphere':
             #print 'SPHERE\t' + str(args)
             poly = 1
             add_sphere(edges,
@@ -87,12 +101,14 @@ def parse_file( fname, edges, transform, screen, color ):
             
         elif line == 'circle':
             #print 'CIRCLE\t' + str(args)
+            poly = 0
             add_circle(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
 
         elif line == 'hermite' or line == 'bezier':
             #print 'curve\t' + line + ": " + str(args)
+            poly = 0
             add_curve(edges,
                       float(args[0]), float(args[1]),
                       float(args[2]), float(args[3]),
@@ -102,7 +118,7 @@ def parse_file( fname, edges, transform, screen, color ):
             
         elif line == 'line':            
             #print 'LINE\t' + str(args)
-
+            poly = 0
             add_edge( edges,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), float(args[5]) )
