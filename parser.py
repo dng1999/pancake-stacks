@@ -52,6 +52,8 @@ def parse_file( fname, edges, transform, screen, color ):
     f = open(fname)
     lines = f.readlines()
     poly = 0
+    #cs = [new_matrix()]
+    #ident(cs[0])
 
     step = 0.1
     c = 0
@@ -63,36 +65,47 @@ def parse_file( fname, edges, transform, screen, color ):
             c+= 1
             args = lines[c].strip().split(' ')
             #print 'args\t' + str(args)
-            
+            '''
+        if line == 'push':
+            print 'PUSH\t'
+            item = []
+            for j in range(len(cs[0])):
+                item.append(cs[-1][j])
+            cs.append(item)
+                
+        elif line == 'pop':
+            print 'POP\t'
+            cs.pop()
+            '''
         if line == 'sphere':
-            #print 'SPHERE\t' + str(args)
-            poly = 1
+            print 'SPHERE\t' + str(args)
             add_sphere(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
             
         elif line == 'torus':
-            #print 'TORUS\t' + str(args)
-            poly = 1
+            print 'TORUS\t' + str(args)
             add_torus(edges,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), step)
             
         elif line == 'box':
-            #print 'BOX\t' + str(args)
-            poly = 1
+            print 'BOX\t' + str(args)
             add_box(edges,
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]))
+            #matrix_mult(cs[-1], edges)
+            #draw_polygons(edges, screen, color)
+            #edges = []
             
         elif line == 'circle':
-            #print 'CIRCLE\t' + str(args)
+            print 'CIRCLE\t' + str(args)
             add_circle(edges,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
 
         elif line == 'hermite' or line == 'bezier':
-            #print 'curve\t' + line + ": " + str(args)
+            print 'curve\t' + line + ": " + str(args)
             add_curve(edges,
                       float(args[0]), float(args[1]),
                       float(args[2]), float(args[3]),
@@ -101,24 +114,24 @@ def parse_file( fname, edges, transform, screen, color ):
                       step, line)                      
             
         elif line == 'line':            
-            #print 'LINE\t' + str(args)
+            print 'LINE\t' + str(args)
 
             add_edge( edges,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), float(args[5]) )
 
         elif line == 'scale':
-            #print 'SCALE\t' + str(args)
+            print 'SCALE\t' + str(args)
             t = make_scale(float(args[0]), float(args[1]), float(args[2]))
             matrix_mult(t, transform)
 
         elif line == 'move':
-            #print 'MOVE\t' + str(args)
+            print 'MOVE\t' + str(args)
             t = make_translate(float(args[0]), float(args[1]), float(args[2]))
             matrix_mult(t, transform)
 
         elif line == 'rotate':
-            #print 'ROTATE\t' + str(args)
+            print 'ROTATE\t' + str(args)
             theta = float(args[1]) * (math.pi / 180)
             
             if args[0] == 'x':
@@ -140,10 +153,8 @@ def parse_file( fname, edges, transform, screen, color ):
 
         elif line == 'display' or line == 'save':
             clear_screen(screen)
-            if poly == 1:
-                draw_polygons(edges, screen, color)
-            else:
-                draw_lines(edges, screen, color)
+            draw_polygons(edges, screen, color)
+            #draw_lines(edges, screen, color)
             if line == 'display':
                 display(screen)
             else:
