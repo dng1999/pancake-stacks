@@ -52,8 +52,8 @@ def parse_file( fname, edges, transform, screen, color ):
     f = open(fname)
     lines = f.readlines()
     poly = 0
-    #cs = [new_matrix()]
-    #ident(cs[0])
+    cs = [new_matrix()]
+    ident(cs[0])
 
     step = 0.1
     c = 0
@@ -65,7 +65,7 @@ def parse_file( fname, edges, transform, screen, color ):
             c+= 1
             args = lines[c].strip().split(' ')
             #print 'args\t' + str(args)
-            '''
+        
         if line == 'push':
             print 'PUSH\t'
             item = []
@@ -76,8 +76,8 @@ def parse_file( fname, edges, transform, screen, color ):
         elif line == 'pop':
             print 'POP\t'
             cs.pop()
-            '''
-        if line == 'sphere':
+        
+        elif line == 'sphere':
             print 'SPHERE\t' + str(args)
             add_sphere(edges,
                        float(args[0]), float(args[1]), float(args[2]),
@@ -95,7 +95,8 @@ def parse_file( fname, edges, transform, screen, color ):
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]))
             #matrix_mult(cs[-1], edges)
-            #draw_polygons(edges, screen, color)
+            #clear_screen(screen)
+            draw_polygons(edges, screen, color)
             #edges = []
             
         elif line == 'circle':
@@ -152,7 +153,7 @@ def parse_file( fname, edges, transform, screen, color ):
             matrix_mult( transform, edges )
 
         elif line == 'display' or line == 'save':
-            clear_screen(screen)
+             clear_screen(screen)
             draw_polygons(edges, screen, color)
             #draw_lines(edges, screen, color)
             if line == 'display':

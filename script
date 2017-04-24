@@ -1,5 +1,6 @@
 ident
 box
 -50 -100 0 75 75 10
-apply
 display
+save
+pic.png
