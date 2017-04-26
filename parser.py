@@ -60,12 +60,12 @@ def parse_file( fname, polyedge, transform, screen, color ):
     c = 0
     while c < len(lines):
         line = lines[c].strip()
-        #print ':' + line + ':'
+        ##print ':' + line + ':'
 
         if line in ARG_COMMANDS:            
             c+= 1
             args = lines[c].strip().split(' ')
-            #print 'args\t' + str(args)
+            ##print 'args\t' + str(args)
         
         if line == 'push':
             print 'PUSH\t'
@@ -153,7 +153,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             else:
                 t = make_rotZ(theta)
             matrix_mult(t, cs[-1])
-                
+
         elif line == 'clear':
             polyedge = []
             
