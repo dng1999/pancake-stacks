@@ -68,15 +68,15 @@ def parse_file( fname, polyedge, transform, screen, color ):
             ##print 'args\t' + str(args)
         
         if line == 'push':
-            print 'PUSH\t'
+            #print 'PUSH\t'
             cs.append(deepcopy(cs[-1]))
                 
         elif line == 'pop':
-            print 'POP\t'
+            #print 'POP\t'
             cs.pop()
         
         elif line == 'sphere':
-            print 'SPHERE\t' + str(args)
+            #print 'SPHERE\t' + str(args)
             add_sphere(polyedge,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
@@ -85,7 +85,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
             
         elif line == 'torus':
-            print 'TORUS\t' + str(args)
+            #print 'TORUS\t' + str(args)
             add_torus(polyedge,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), step)
@@ -94,7 +94,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
             
         elif line == 'box':
-            print 'BOX\t' + str(args)
+            #print 'BOX\t' + str(args)
             add_box(polyedge,
                     float(args[0]), float(args[1]), float(args[2]),
                     float(args[3]), float(args[4]), float(args[5]))
@@ -103,7 +103,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
             
         elif line == 'circle':
-            print 'CIRCLE\t' + str(args)
+            #print 'CIRCLE\t' + str(args)
             add_circle(polyedge,
                        float(args[0]), float(args[1]), float(args[2]),
                        float(args[3]), step)
@@ -112,7 +112,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
 
         elif line == 'hermite' or line == 'bezier':
-            print 'curve\t' + line + ": " + str(args)
+            #print 'curve\t' + line + ": " + str(args)
             add_curve(polyedge,
                       float(args[0]), float(args[1]),
                       float(args[2]), float(args[3]),
@@ -124,7 +124,7 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
             
         elif line == 'line':            
-            print 'LINE\t' + str(args)
+            #print 'LINE\t' + str(args)
             add_edge( polyedge,
                       float(args[0]), float(args[1]), float(args[2]),
                       float(args[3]), float(args[4]), float(args[5]) )
@@ -133,17 +133,19 @@ def parse_file( fname, polyedge, transform, screen, color ):
             polyedge = []
             
         elif line == 'scale':
-            print 'SCALE\t' + str(args)
+            #print 'SCALE\t' + str(args)
             t = make_scale(float(args[0]), float(args[1]), float(args[2]))
-            matrix_mult(t, cs[-1])
+            matrix_mult(cs[-1],t)
+            cs[-1] = t
 
         elif line == 'move':
-            print 'MOVE\t' + str(args)
+            #print 'MOVE\t' + str(args)
             t = make_translate(float(args[0]), float(args[1]), float(args[2]))
-            matrix_mult(t, cs[-1])
+            matrix_mult(cs[-1],t)
+            cs[-1] = t
 
         elif line == 'rotate':
-            print 'ROTATE\t' + str(args)
+            #print 'ROTATE\t' + str(args)
             theta = float(args[1]) * (math.pi / 180)
             
             if args[0] == 'x':
@@ -152,7 +154,8 @@ def parse_file( fname, polyedge, transform, screen, color ):
                 t = make_rotY(theta)
             else:
                 t = make_rotZ(theta)
-            matrix_mult(t, cs[-1])
+            matrix_mult(cs[-1],t)
+            cs[-1] = t
 
         elif line == 'clear':
             polyedge = []
